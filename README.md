@@ -1,12 +1,50 @@
-# React + Vite
+# Virtuele Vrije Trap Trainer
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+Een React-applicatie die MediaPipe en KNN gebruikt om voetballers te helpen bij het verbeteren van hun vrije trap techniek.
 
-Currently, two official plugins are available:
+## Features
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react/README.md) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+- Real-time pose detection met MediaPipe
+- KNN-model voor houding classificatie
+- Training modus voor goede en slechte houdingen
+- Direct feedback op houding
+- Analyse van trainingsdata met accuraatheid en confusion matrix
 
-## Expanding the ESLint configuration
+## Installatie
 
-If you are developing a production application, we recommend using TypeScript and enable type-aware lint rules. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
+1. Clone de repository:
+```bash
+git clone https://github.com/Itachi2002/prg8opdr1.git
+cd prg8opdr1
+```
+
+2. Installeer dependencies:
+```bash
+npm install
+```
+
+3. Start de development server:
+```bash
+npm run dev
+```
+
+## Gebruik
+
+1. Start de applicatie en geef toegang tot je webcam
+2. Gebruik de groene knoppen om goede houdingen te trainen
+3. Gebruik de rode knoppen om slechte houdingen te trainen
+4. Sla meerdere voorbeelden op met de blauwe "Opslaan" knop
+5. Train eerst de starthoudingen, dan de standvoet en schietbeen
+6. Ontvang direct feedback op je houding
+
+## Technische Stack
+
+- React 18
+- Vite
+- MediaPipe Pose Detection
+- TensorFlow.js
+- Tailwind CSS
+
+## Licentie
+
+MIT
