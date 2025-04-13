@@ -1,0 +1,166 @@
+#root {
+  max-width: 1280px;
+  margin: 0 auto;
+  padding: 2rem;
+  text-align: center;
+}
+
+.logo {
+  height: 6em;
+  padding: 1.5em;
+  will-change: filter;
+  transition: filter 300ms;
+}
+.logo:hover {
+  filter: drop-shadow(0 0 2em #646cffaa);
+}
+.logo.react:hover {
+  filter: drop-shadow(0 0 2em #61dafbaa);
+}
+
+@keyframes logo-spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  a:nth-of-type(2) .logo {
+    animation: logo-spin infinite 20s linear;
+  }
+}
+
+.card {
+  padding: 2em;
+}
+
+.read-the-docs {
+  color: #888;
+}
+
+.videosection {
+    background-color: rgb(70, 70, 70);
+    height: 270px;
+    position: relative;
+    width: 480px;
+}
+
+.videosection video {
+    position: absolute;
+}
+
+.videosection canvas {
+    position: absolute;
+    transform: rotateY(180deg);
+}
+
+/* Base styles */
+body {
+    background-color: #f3f4f6;
+    color: #1f2937;
+}
+
+.container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 1rem;
+}
+
+/* Video container */
+.relative {
+    position: relative;
+    background-color: #000;
+    border-radius: 0.5rem;
+    overflow: hidden;
+}
+
+video, canvas {
+    width: 100%;
+    max-width: 640px;
+    border-radius: 0.5rem;
+}
+
+/* Cards */
+.bg-white {
+    background-color: white;
+    border-radius: 0.5rem;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+}
+
+/* Buttons */
+button {
+    transition: all 0.2s ease;
+}
+
+button:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+button:active {
+    transform: translateY(0);
+}
+
+/* Training status */
+.space-y-4 > * + * {
+    margin-top: 1rem;
+}
+
+/* Grid layout */
+.grid {
+    display: grid;
+    gap: 1rem;
+}
+
+@media (min-width: 768px) {
+    .grid-cols-2 {
+        grid-template-columns: repeat(2, 1fr);
+    }
+}
+
+/* Feedback messages */
+.text-lg {
+    font-size: 1.125rem;
+    line-height: 1.75rem;
+}
+
+/* Headers */
+.text-3xl {
+    font-size: 1.875rem;
+    line-height: 2.25rem;
+}
+
+.text-xl {
+    font-size: 1.25rem;
+    line-height: 1.75rem;
+}
+
+/* Shadows */
+.shadow {
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1), 0 1px 2px rgba(0, 0, 0, 0.06);
+}
+
+/* Button colors */
+.bg-blue-500 {
+    background-color: #3b82f6;
+}
+
+.bg-red-500 {
+    background-color: #ef4444;
+}
+
+.text-white {
+    color: white;
+}
+
+/* Rounded corners */
+.rounded {
+    border-radius: 0.375rem;
+}
+
+.rounded-lg {
+    border-radius: 0.5rem;
+}
