@@ -39,6 +39,15 @@ function Posedetector({ onPoseDetected }) {
 
             // Draw the pose landmarks
             if (results.poseLandmarks) {
+                // Log pose data
+                console.log('Pose Landmarks:', results.poseLandmarks);
+                
+                // Log specifieke punten voor debugging
+                console.log('Rechter schouder:', results.poseLandmarks[12]);
+                console.log('Linker schouder:', results.poseLandmarks[11]);
+                console.log('Rechter heup:', results.poseLandmarks[24]);
+                console.log('Linker heup:', results.poseLandmarks[23]);
+
                 drawConnectors(canvasCtx, results.poseLandmarks, POSE_CONNECTIONS, {
                     color: '#00FF00',
                     lineWidth: 4
@@ -52,6 +61,8 @@ function Posedetector({ onPoseDetected }) {
                 if (onPoseDetected) {
                     onPoseDetected(results.poseLandmarks);
                 }
+            } else {
+                console.log('Geen pose gedetecteerd');
             }
             canvasCtx.restore();
         });
@@ -65,8 +76,12 @@ function Posedetector({ onPoseDetected }) {
         });
 
         camera.start()
-            .then(() => console.log('Camera started'))
-            .catch((error) => console.error('Error starting camera:', error));
+            .then(() => {
+                console.log('Camera gestart - Je zou nu pose data in de console moeten zien verschijnen');
+            })
+            .catch((error) => {
+                console.error('Error bij het starten van de camera:', error);
+            });
 
         return () => {
             camera.stop();
