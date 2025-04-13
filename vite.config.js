@@ -17,5 +17,15 @@ export default defineConfig({
       '@mediapipe/camera_utils': '@mediapipe/camera_utils',
       '@mediapipe/drawing_utils': '@mediapipe/drawing_utils'
     }
+  },
+  build: {
+    outDir: 'dist',
+    sourcemap: false,
+    minify: true,
+    target: 'es2018',
+  },
+  server: {
+    port: 3000,
+    host: true
   }
 })
