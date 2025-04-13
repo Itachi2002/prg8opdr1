@@ -5,7 +5,7 @@ import kNear from './knear.js';
 
 // Constants for the KNN classifier
 const K = 5;
-const MOVEMENT_THRESHOLD = 0.01;
+const MOVEMENT_THRESHOLD = 0.05;
 const DEBOUNCE_TIME = 500; // ms
 const POSE_CAPTURE_DELAY = 5; // seconds
 
@@ -201,6 +201,39 @@ function App() {
     return total > 0 ? Math.min((total / 6) * 100, 100) : 0;
   };
 
+  // Nieuwe functie om model op te slaan
+  const handleSaveModel = () => {
+    try {
+      const modelData = knnClassifier.saveModel();
+      localStorage.setItem('vrije_trap_model', modelData);
+      setFeedback('✅ Model succesvol opgeslagen!');
+    } catch (error) {
+      console.error('Error bij opslaan model:', error);
+      setFeedback('❌ Fout bij opslaan model');
+    }
+  };
+
+  // Nieuwe functie om model te laden
+  const handleLoadModel = () => {
+    try {
+      const savedModel = localStorage.getItem('vrije_trap_model');
+      if (savedModel) {
+        knnClassifier.loadModel(savedModel);
+        setFeedback(`✅ Model geladen met ${knnClassifier.training.length} voorbeelden`);
+      } else {
+        setFeedback('ℹ️ Geen opgeslagen model gevonden');
+      }
+    } catch (error) {
+      console.error('Error bij laden model:', error);
+      setFeedback('❌ Fout bij laden model');
+    }
+  };
+
+  // Laad het model bij het opstarten
+  useEffect(() => {
+    handleLoadModel();
+  }, []);
+
   return (
     <div className="min-h-screen bg-gradient-to-b from-blue-50 to-white py-8">
       <div className="max-w-[1600px] mx-auto px-8">
@@ -291,6 +324,21 @@ function App() {
               ))}
             </div>
           </div>
+        </div>
+
+        <div className="mt-4 space-x-2">
+          <button
+            onClick={handleSaveModel}
+            className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
+          >
+            💾 Model Opslaan
+          </button>
+          <button
+            onClick={handleLoadModel}
+            className="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded"
+          >
+            📂 Model Laden
+          </button>
         </div>
       </div>
     </div>

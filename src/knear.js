@@ -1,12 +1,8 @@
 export default class kNear {
-    constructor(k, training = []) {
-        this.k = k
-        this.training = training;
-        if (this.training.length === 0) {
-            this.array_size = -1;
-        } else {
-            this.array_size = this.training[0].v.length;
-        }
+    constructor(k = 3) {
+        this.k = k;
+        this.training = [];
+        this.maxDist = 0;
     }
 
     //compute the euclidean distance between two vectors
@@ -41,82 +37,101 @@ export default class kNear {
         return result
     }
 
-    checkInput(v) {
-        if (Array.isArray(v)) {
-            // array is correct
-            if (v.length > 0) {
-                // array contains values
-                if (typeof v[0] == 'number') {
-                    // first value is a number
-                    if (this.array_size > -1) {
-                        // training has data to compare the size to
-                        if (v.length == this.array_size) {
-                            // size of the array is correct
-                            return true;
-                        } else {
-                            console.error(`Learn en classify verwachten een array met numbers van dezelfde lengte, je stuurt nu een array met lengte ${v.length}, terwijl je eerder lengte ${this.array_size} gebruikt hebt.`);
-                        }
-                    } else {
-                        // first value set training size
-                        this.array_size = v.length;
-                        return true;
-                    }
-                } else {
-                    console.error(`Learn en classify verwachten een array met numbers, je stuurt nu array met ${typeof v[0]}.`);
-                }
-            } else {
-                console.error("Learn en classify verwachten een array met numbers, je stuurt nu lege array.");
-            }
-        } else {
-            console.error(`Learn en classify verwachten een array met numbers, je stuurt nu geen array, maar ${typeof v}.`);
+    checkInput(point) {
+        if (!Array.isArray(point)) {
+            throw new Error("Punt moet een array zijn");
         }
+        if (this.training.length > 0 && point.length !== this.training[0].point.length) {
+            throw new Error(`Punt moet ${this.training[0].point.length} dimensies hebben`);
+        }
+        if (point.some(isNaN)) {
+            throw new Error("Punt mag geen NaN waarden bevatten");
+        }
+    }
 
-        // something was wrong for this vector
-        return false
+    distance(p1, p2) {
+        let sum = 0;
+        for (let i = 0; i < p1.length; i++) {
+            sum += (p1[i] - p2[i]) ** 2;
+        }
+        return Math.sqrt(sum);
+    }
+
+    updateMaxDist() {
+        this.maxDist = 0;
+        for (let i = 0; i < this.training.length; i++) {
+            for (let j = 0; j < this.training.length; j++) {
+                if (i !== j) {
+                    const dist = this.distance(this.training[i].point, this.training[j].point);
+                    if (dist > this.maxDist) {
+                        this.maxDist = dist;
+                    }
+                }
+            }
+        }
     }
 
     //add a point to the training set
-    learn(vector, label) {
-        this.checkInput(vector)
-        let obj = { v: vector, lab: label }
-        this.training.push(obj)
+    learn(point, label) {
+        this.checkInput(point);
+        this.training.push({ point, label });
+        this.updateMaxDist();
     }
 
     // classify a new unknown point
-    classify(v) {
-        this.checkInput(v)
-        let voteBloc = []
-        let maxD = 0
+    classify(point) {
+        this.checkInput(point);
+        if (this.training.length === 0) {
+            throw new Error("Geen trainingdata beschikbaar");
+        }
 
-        for(let obj of this.training) {
-            let o = { d: this.dist(v, obj.v), vote: obj.lab }
-            if (voteBloc.length < this.k) {
-                voteBloc.push(o);
-                maxD = this.updateMax(maxD, voteBloc)
-            } else {
-                if (o.d < maxD) {
-                    let bool = true
-                    let count = 0
-                    while (bool) {
-                        if (Number(voteBloc[count].d) === maxD) {
-                            voteBloc.splice(count, 1, o)
-                            maxD = this.updateMax(maxD, voteBloc)
-                            bool = false
-                        } else {
-                            if (count < voteBloc.length - 1) {
-                                count++
-                            } else {
-                                bool = false
-                            }
-                        }
-                    }
-                }
+        const distances = this.training.map(item => ({
+            label: item.label,
+            distance: this.distance(point, item.point)
+        }));
+
+        distances.sort((a, b) => a.distance - b.distance);
+        const kNearest = distances.slice(0, this.k);
+        
+        // Tel de stemmen voor elk label
+        const votes = {};
+        kNearest.forEach(item => {
+            votes[item.label] = (votes[item.label] || 0) + 1;
+        });
+
+        // Vind het label met de meeste stemmen
+        let maxVotes = 0;
+        let winner = null;
+        for (const label in votes) {
+            if (votes[label] > maxVotes) {
+                maxVotes = votes[label];
+                winner = label;
             }
         }
-        let votes = []
-        for(let el of voteBloc) {
-            votes.push(el.vote)
+
+        return winner;
+    }
+
+    // Nieuwe methode om model op te slaan
+    saveModel() {
+        const modelData = {
+            k: this.k,
+            training: this.training,
+            maxDist: this.maxDist
+        };
+        return JSON.stringify(modelData);
+    }
+
+    // Nieuwe methode om model te laden
+    loadModel(modelData) {
+        try {
+            const data = JSON.parse(modelData);
+            this.k = data.k;
+            this.training = data.training;
+            this.maxDist = data.maxDist;
+            console.log('Model succesvol geladen met', this.training.length, 'trainingsvoorbeelden');
+        } catch (error) {
+            throw new Error('Ongeldig model formaat');
         }
-        return this.mode(votes)
     }
 } 
