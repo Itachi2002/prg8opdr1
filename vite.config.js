@@ -8,14 +8,7 @@ export default defineConfig({
     outDir: 'dist',
     sourcemap: false,
     minify: true,
-    target: 'es2018',
-    rollupOptions: {
-      external: [
-        '@mediapipe/pose',
-        '@mediapipe/camera_utils',
-        '@mediapipe/drawing_utils'
-      ]
-    }
+    target: 'es2018'
   },
   server: {
     port: 3000,
